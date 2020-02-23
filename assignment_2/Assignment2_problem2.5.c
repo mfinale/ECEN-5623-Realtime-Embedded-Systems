@@ -1,10 +1,11 @@
 
 
-
+#include <fcntl.h> 
 #include <stdio.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <sys/wait.h>
+#include <unistd.h>
 const char *semName = "my_semaphore";
 void parent(void){
     sem_t *sem_id = sem_open(semName, O_CREAT, 0600, 0); //open sem
@@ -35,6 +36,7 @@ void child(void)
     if (sem_id == SEM_FAILED){
         perror("Child   : [sem_open] Failed\n"); return;        
     }
+    sleep(12);
     printf("Child   : I am done! Release Semaphore\n");
     if (sem_post(sem_id) < 0)
         printf("Child   : [sem_post] Failed \n");
@@ -45,7 +47,7 @@ int main(int argc, char *argv[])
     pid = fork();
     if (pid < 0){
         perror("fork");
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
     }
     if (!pid){
         child();
