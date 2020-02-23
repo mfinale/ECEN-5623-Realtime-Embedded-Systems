@@ -8,28 +8,23 @@
 #include <unistd.h>
 const char *semName = "my_semaphore";
 void parent(void){
-    sem_t *sem_id = sem_open(semName, O_CREAT, 0600, 0); //open sem
+    sem_t *sem_id = sem_open(semName, O_CREAT, 0600, 0); //open reference to semaphore
    
-	//check if it failed
+
+   //check if open to semaphore failed
    if (sem_id == SEM_FAILED){
         perror("Parent  : [sem_open] Failed\n"); return;
     }
 	//print statement from parent
     printf("Parent  : Wait for Child to Print\n");
-	//is this a syntax error?
-	
-    if (sem_wait(sem_id) < 0)
-        printf("Parent  : [sem_wait] Failed\n");
+    //wait for semaphore to be set by child process.	
+    sem_wait(sem_id);
     printf("Parent  : Child Printed! \n");
-    
-    if (sem_close(sem_id) != 0){
-        perror("Parent  : [sem_close] Failed\n"); return;
-    }
-    if (sem_unlink(semName) < 0){
-        printf("Parent  : [sem_unlink] Failed\n"); return;
-    }
+    sem_close(sem_id);
+    sem_unlink(semName);
+
 }
-//child is called first and post semaphone once its done
+
 void child(void)
 {
     sem_t *sem_id = sem_open(semName, O_CREAT, 0600, 0);
@@ -43,11 +38,11 @@ void child(void)
 }
 int main(int argc, char *argv[])
 {
-    pid_t pid;
+    pid_t pid; //create a pid_t datatype 
     pid = fork();
     if (pid < 0){
         perror("fork");
-        //exit(EXIT_FAILURE);
+        printf("error on fork\n");
     }
     if (!pid){
         child();
