@@ -45,6 +45,7 @@ void *grabRsrcs(void *threadp)
 		   usleep(1000000);					
 		   pthread_mutex_lock(&rsrcA);		//Lock resource A
 		   pthread_mutex_lock(&rsrcB);		//Lock resource B
+		    printf("working.... \n");
 	   }
 	 else
 	   {
