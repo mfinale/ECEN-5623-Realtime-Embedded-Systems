@@ -23,7 +23,7 @@ OBJS3= ${CFILES3:.c=.o}
 all:  deadlock deadlock_fix
 
 clean:
-	-rm -f *.o *.d *.exe  deadlock deadlock_fix
+	-rm -f *.o *.d *.exe  deadlock deadlock_fix deadlock_8
 
 
 deadlock: deadlock.o
