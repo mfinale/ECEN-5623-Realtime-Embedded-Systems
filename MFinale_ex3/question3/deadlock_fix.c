@@ -40,6 +40,7 @@ void *grabRsrcs(void *threadp)
 	 timeout_B.tv_sec += (rand()) % 10;
 	 int rscB_timeout = pthread_mutex_timedlock(&rsrcB,&timeout_B);
 	 rscB_timeout = 1;
+	 printf("working.... \n");
  	 if(rscB_timeout  != 0)
 	   {
 		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A
