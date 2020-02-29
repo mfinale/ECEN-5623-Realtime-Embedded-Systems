@@ -20,7 +20,7 @@ OBJS1= ${CFILES1:.c=.o}
 OBJS2= ${CFILES2:.c=.o}
 OBJS3= ${CFILES3:.c=.o}
 
-all:  deadlock deadlock_fix
+all:  deadlock deadlock_fix deadlock_8
 
 clean:
 	-rm -f *.o *.d *.exe  deadlock deadlock_fix deadlock_8
