@@ -17,7 +17,7 @@ SRCS2= ${HFILES} ${CFILES2}
 OBJS1= ${CFILES1:.c=.o}
 OBJS2= ${CFILES2:.c=.o}
 
-all:  deadlock 
+all:  deadlock deadlock_fix
 
 clean:
 	-rm -f *.o *.d *.exe  deadlock deadlock_fix
