@@ -8,52 +8,46 @@
 #define THREAD_1 1
 #define THREAD_2 2
 
-typedef struct
-{
-    int threadIdx;
-} threadParams_t;
 
 
 pthread_t threads[NUM_THREADS];
-threadParams_t threadParams[NUM_THREADS];
 struct sched_param nrt_param;
 pthread_mutex_t rsrcA, rsrcB; //two mutexes called resource a and b
 volatile int rsrcACnt=0, rsrcBCnt=0, noWait=0;
 struct timespec timeout_B;
 struct timespec timeout_A;
+int threadp;
 
 void *grabRsrcs(void *threadp)
 {
-   threadParams_t *threadParams = (threadParams_t *)threadp;
-   int threadIdx = threadParams->threadIdx;
 
 
-   if(threadIdx == THREAD_1)
+
+   if(threadp == THREAD_1)
    {
      printf("THREAD 1 grabbing resources\n");
      pthread_mutex_lock(&rsrcA);
      rsrcACnt++;
-     if(!noWait) {sleep(3);}
+     if(!noWait) {sleep(1);}
      printf("THREAD 1 got A, trying for B\n");
-	 
+
 	 clock_gettime(CLOCK_REALTIME,&(timeout_B));
 	 timeout_B.tv_sec += (rand()) % 10;
 	 int rscB_timeout = pthread_mutex_timedlock(&rsrcB,&timeout_B);
-	 printf("working.... \n");
  	 if(rscB_timeout  != 0)
 	   {
-		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A
-		   sleep(3);					
-		   pthread_mutex_lock(&rsrcA);		//Lock resource A
-		   pthread_mutex_lock(&rsrcB);		//Lock resource B
-		    printf("working.... \n");
+		   pthread_mutex_unlock(&rsrcA);
+		   sleep(1);
+		   pthread_mutex_lock(&rsrcA);
+		   pthread_mutex_lock(&rsrcB);
+
 	   }
 	 else
 	   {
 		   rsrcBCnt++;
 		   printf("THREAD 1 got A and B\n");
-		   pthread_mutex_unlock(&rsrcB);	//Unlock resource B 
-		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A
+		   pthread_mutex_unlock(&rsrcB);
+		   pthread_mutex_unlock(&rsrcA);
 		   printf("THREAD 1 done\n");
 	   }
    }
@@ -64,14 +58,14 @@ void *grabRsrcs(void *threadp)
      rsrcBCnt++;
      if(!noWait) {sleep(3);}
      printf("THREAD 2 got B, trying for A\n");
-	 
+
 	 clock_gettime(CLOCK_REALTIME,&(timeout_A));
 	 timeout_A.tv_sec += (rand()) % 10;
-	 int rscA_timeout = pthread_mutex_timedlock(&rsrcB,&timeout_A);
+	 int rscA_timeout = pthread_mutex_timedlock(&rsrcA,&timeout_A);
  	 if(rscA_timeout  != 0)
 	   {
 		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A
-		   sleep(3);					
+		   sleep(3);
 		   pthread_mutex_lock(&rsrcA);		//Lock resource A
 		   pthread_mutex_lock(&rsrcB);		//Lock resource B
 		    printf("working.... \n");
@@ -85,7 +79,7 @@ void *grabRsrcs(void *threadp)
 		printf("THREAD 2 done\n");
 	   }
 
-     
+
    }
    pthread_exit(NULL);
 }
@@ -119,8 +113,7 @@ int main (int argc, char *argv[])
    pthread_mutex_init(&rsrcB, NULL);
 
    printf("Creating thread %d\n", THREAD_1);
-   threadParams[THREAD_1].threadIdx=THREAD_1;
-   rc = pthread_create(&threads[0], NULL, grabRsrcs, (void *)&threadParams[THREAD_1]);
+   rc = pthread_create(&threads[0], NULL, grabRsrcs, (void *)THREAD_1);
    if (rc) {printf("ERROR; pthread_create() rc is %d\n", rc); perror(NULL); exit(-1);}
    printf("Thread 1 spawned\n");
 
@@ -133,8 +126,7 @@ int main (int argc, char *argv[])
    }
 
    printf("Creating thread %d\n", THREAD_2);
-   threadParams[THREAD_2].threadIdx=THREAD_2;
-   rc = pthread_create(&threads[1], NULL, grabRsrcs, (void *)&threadParams[THREAD_2]);
+   rc = pthread_create(&threads[1], NULL, grabRsrcs, (void *)THREAD_2);
    if (rc) {printf("ERROR; pthread_create() rc is %d\n", rc); perror(NULL); exit(-1);}
    printf("Thread 2 spawned\n");
 
