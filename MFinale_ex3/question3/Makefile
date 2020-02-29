@@ -26,7 +26,7 @@ clean:
 deadlock: deadlock.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS1) $(LIBS)
 
-deadlock_fix: deadlock_timeout.o
+deadlock_fix: deadlock_fix.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS2) $(LIBS)
 
 depend:
