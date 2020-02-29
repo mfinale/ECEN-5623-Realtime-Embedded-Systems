@@ -36,6 +36,11 @@ void *grabRsrcs(void *threadp)
 	 pthread_mutex_unlock(&rsrcA);
      if(!noWait) usleep(1000000);
      printf("THREAD 1 got A, trying for B\n");
+	 
+	 clock_gettime(CLOCK_REALTIME,&(timeout_B));
+	 timeout_B.tv_sec += (rand()) % 10;
+	 
+	 
      pthread_mutex_lock(&rsrcB);
 	 
      rsrcBCnt++;
