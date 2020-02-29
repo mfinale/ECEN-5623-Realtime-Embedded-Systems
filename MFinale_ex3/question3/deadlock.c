@@ -35,8 +35,7 @@ void *grabRsrcs(void *threadp)
      printf("THREAD 1 grabbing resources\n");
      pthread_mutex_lock(&rsrcA);
      rsrcACnt++;
-     if(!noWait) usleep(1000000);
-	 //unlock resource a here
+     //if(!noWait) usleep(1000000);
      printf("THREAD 1 got A, trying for B\n");
      pthread_mutex_lock(&rsrcB);
      rsrcBCnt++;
@@ -50,8 +49,7 @@ void *grabRsrcs(void *threadp)
      printf("THREAD 2 grabbing resources\n");
      pthread_mutex_lock(&rsrcB);
      rsrcBCnt++;
-     if(!noWait) usleep(1000000);
-	 //unlock resource b here
+     //if(!noWait) usleep(1000000);
      printf("THREAD 2 got B, trying for A\n");
      pthread_mutex_lock(&rsrcA);
      rsrcACnt++;
