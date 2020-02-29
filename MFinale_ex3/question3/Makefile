@@ -9,13 +9,16 @@ HFILES=
 
 CFILES1= deadlock.c
 CFILES2= deadlock_fix.c
+CFILES3= deadlock_8.c
 
 SRCS1= ${HFILES} ${CFILES1}
 SRCS2= ${HFILES} ${CFILES2}
+SRCS3= ${HFILES} ${CFILES3}
 
 
 OBJS1= ${CFILES1:.c=.o}
 OBJS2= ${CFILES2:.c=.o}
+OBJS3= ${CFILES3:.c=.o}
 
 all:  deadlock deadlock_fix
 
@@ -28,6 +31,9 @@ deadlock: deadlock.o
 
 deadlock_fix: deadlock_fix.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS2) $(LIBS)
+	
+deadlock_8: deadlock_8.o
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS3) $(LIBS)
 
 depend:
 
