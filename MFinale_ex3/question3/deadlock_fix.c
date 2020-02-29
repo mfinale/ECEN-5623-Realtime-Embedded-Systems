@@ -39,7 +39,7 @@ void *grabRsrcs(void *threadp)
 	 
 	 clock_gettime(CLOCK_REALTIME,&(timeout_B));
 	 timeout_B.tv_sec += (rand()) % 10;
-	 
+	 int rscB_timeout = pthread_mutex_timedlock(&rsrcB,&timeout_B);
 	 
      pthread_mutex_lock(&rsrcB);
 	 
