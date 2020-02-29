@@ -1,3 +1,13 @@
+/*
+*  Code adapted from  http://mercury.pr.erau.edu/~siewerts/cec450/code/example-sync/
+*  Exercise3 Question3: This file solves the deadlock encountered in deadlock.c
+*  by using pthread_mutex_timedlock with a random timeout to lock the second resource.
+*  compile: call make with included make file
+*  usage: $./deadlock_fix
+*/
+
+
+
 #include <pthread.h>
 #include <stdio.h>
 #include <sched.h>
@@ -64,10 +74,10 @@ void *grabRsrcs(void *threadp)
 	 int rscA_timeout = pthread_mutex_timedlock(&rsrcA,&timeout_A);
  	 if(rscA_timeout  != 0)
 	   {
-		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A
+		   pthread_mutex_unlock(&rsrcA);
 		   sleep(3);
-		   pthread_mutex_lock(&rsrcA);		//Lock resource A
-		   pthread_mutex_lock(&rsrcB);		//Lock resource B
+		   pthread_mutex_lock(&rsrcA);
+		   pthread_mutex_lock(&rsrcB);
 		    printf("working.... \n");
 	   }
 	 else

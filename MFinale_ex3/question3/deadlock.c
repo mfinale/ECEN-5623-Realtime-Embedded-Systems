@@ -1,3 +1,12 @@
+/*
+*  Code adapted from  http://mercury.pr.erau.edu/~siewerts/cec450/code/example-sync/
+*  Exercise3 Question3: This file demonstrates deadlock and was slightly modified
+*  in order to run properly in a linux environment.
+*  compile: call make with included make file
+*  usage: $./deadlock
+*/
+
+
 #include <pthread.h>
 #include <stdio.h>
 #include <sched.h>
@@ -8,29 +17,21 @@
 #define THREAD_1 1
 #define THREAD_2 2
 
-typedef struct
-{
-    int threadIdx;
-} threadParams_t;
 
 
 pthread_t threads[NUM_THREADS];
-threadParams_t threadParams[NUM_THREADS];
-
 struct sched_param nrt_param;
-
 pthread_mutex_t rsrcA, rsrcB; //two mutexes called resource a and b
-
 volatile int rsrcACnt=0, rsrcBCnt=0, noWait=0;
+int threadp;
 
 
 void *grabRsrcs(void *threadp)
 {
-   threadParams_t *threadParams = (threadParams_t *)threadp;
-   int threadIdx = threadParams->threadIdx;
 
 
-   if(threadIdx == THREAD_1)
+
+   if(threadp == THREAD_1)
    {
      printf("THREAD 1 grabbing resources\n");
      pthread_mutex_lock(&rsrcA);
@@ -90,8 +91,7 @@ int main (int argc, char *argv[])
    pthread_mutex_init(&rsrcB, NULL);
 
    printf("Creating thread %d\n", THREAD_1);
-   threadParams[THREAD_1].threadIdx=THREAD_1;
-   rc = pthread_create(&threads[0], NULL, grabRsrcs, (void *)&threadParams[THREAD_1]);
+   rc = pthread_create(&threads[0], NULL, grabRsrcs, (void *)THREAD_1);
    if (rc) {printf("ERROR; pthread_create() rc is %d\n", rc); perror(NULL); exit(-1);}
    printf("Thread 1 spawned\n");
 
@@ -104,8 +104,7 @@ int main (int argc, char *argv[])
    }
 
    printf("Creating thread %d\n", THREAD_2);
-   threadParams[THREAD_2].threadIdx=THREAD_2;
-   rc = pthread_create(&threads[1], NULL, grabRsrcs, (void *)&threadParams[THREAD_2]);
+   rc = pthread_create(&threads[1], NULL, grabRsrcs, (void *)THREAD_2);
    if (rc) {printf("ERROR; pthread_create() rc is %d\n", rc); perror(NULL); exit(-1);}
    printf("Thread 2 spawned\n");
 
