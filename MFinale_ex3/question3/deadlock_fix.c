@@ -33,20 +33,27 @@ void *grabRsrcs(void *threadp)
      printf("THREAD 1 grabbing resources\n");
      pthread_mutex_lock(&rsrcA);
      rsrcACnt++;
-	 pthread_mutex_unlock(&rsrcA);
      if(!noWait) usleep(1000000);
      printf("THREAD 1 got A, trying for B\n");
 	 
 	 clock_gettime(CLOCK_REALTIME,&(timeout_B));
 	 timeout_B.tv_sec += (rand()) % 10;
 	 int rscB_timeout = pthread_mutex_timedlock(&rsrcB,&timeout_B);
-	 
-     pthread_mutex_lock(&rsrcB);
-	 
-     rsrcBCnt++;
-     printf("THREAD 1 got A and B\n");
-     pthread_mutex_unlock(&rsrcB);    
-     printf("THREAD 1 done\n");
+ 	 if(rscB_timeout  != 0)
+	   {
+		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A
+		   usleep(1000000);					
+		   pthread_mutex_lock(&rsrcA);		//Lock resource A
+		   pthread_mutex_lock(&rsrcB);		//Lock resource B
+	   }
+	 else
+	   {
+		   rsrcBCnt++;
+		   printf("THREAD 1 got A and B\n");
+		   pthread_mutex_unlock(&rsrcB);	//Unlock resource B before exiting function
+		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A before exiting function
+		   printf("THREAD 1 done\n");
+	   }
    }
    else
    {
