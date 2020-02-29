@@ -68,7 +68,7 @@ void *grabRsrcs(void *threadp)
 	 clock_gettime(CLOCK_REALTIME,&(timeout_A));
 	 timeout_A.tv_sec += (rand()) % 10;
 	 int rscA_timeout = pthread_mutex_timedlock(&rsrcB,&timeout_A);
- 	 if(rscB_timeout  != 0)
+ 	 if(rscA_timeout  != 0)
 	   {
 		   pthread_mutex_unlock(&rsrcA);	//Unlock resource A
 		   usleep(1000000);					
