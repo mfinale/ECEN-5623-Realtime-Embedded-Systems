@@ -16,13 +16,11 @@ typedef struct
 
 pthread_t threads[NUM_THREADS];
 threadParams_t threadParams[NUM_THREADS];
-
 struct sched_param nrt_param;
-
 pthread_mutex_t rsrcA, rsrcB; //two mutexes called resource a and b
-
 volatile int rsrcACnt=0, rsrcBCnt=0, noWait=0;
-
+struct timespec timeout_B;
+struct timespec timeout_A;
 
 void *grabRsrcs(void *threadp)
 {
@@ -35,13 +33,14 @@ void *grabRsrcs(void *threadp)
      printf("THREAD 1 grabbing resources\n");
      pthread_mutex_lock(&rsrcA);
      rsrcACnt++;
+	 pthread_mutex_unlock(&rsrcA);
      if(!noWait) usleep(1000000);
      printf("THREAD 1 got A, trying for B\n");
      pthread_mutex_lock(&rsrcB);
+	 
      rsrcBCnt++;
      printf("THREAD 1 got A and B\n");
-     pthread_mutex_unlock(&rsrcB);
-     pthread_mutex_unlock(&rsrcA);
+     pthread_mutex_unlock(&rsrcB);    
      printf("THREAD 1 done\n");
    }
    else
@@ -49,13 +48,13 @@ void *grabRsrcs(void *threadp)
      printf("THREAD 2 grabbing resources\n");
      pthread_mutex_lock(&rsrcB);
      rsrcBCnt++;
+	 pthread_mutex_unlock(&rsrcB);
      if(!noWait) usleep(1000000);
      printf("THREAD 2 got B, trying for A\n");
      pthread_mutex_lock(&rsrcA);
      rsrcACnt++;
      printf("THREAD 2 got B and A\n");
      pthread_mutex_unlock(&rsrcA);
-     pthread_mutex_unlock(&rsrcB);
      printf("THREAD 2 done\n");
    }
    pthread_exit(NULL);

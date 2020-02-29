@@ -8,35 +8,26 @@ LIBS=-lpthread -lrt
 HFILES=
 
 CFILES1= deadlock.c
-#CFILES2= deadlock.c
-#CFILES3= pthread3.c
-#CFILES4= deadlock_timeout.c
+CFILES2= deadlock_fix.c
 
 SRCS1= ${HFILES} ${CFILES1}
-#SRCS2= ${HFILES} ${CFILES2}
-#SRCS3= ${HFILES} ${CFILES3}
-#SRCS4= ${HFILES} ${CFILES4}
+SRCS2= ${HFILES} ${CFILES2}
+
 
 OBJS1= ${CFILES1:.c=.o}
-#OBJS2= ${CFILES2:.c=.o}
-#OBJS3= ${CFILES3:.c=.o}
-#OBJS4= ${CFILES4:.c=.o}
+OBJS2= ${CFILES2:.c=.o}
 
 all:  deadlock 
 
 clean:
-	-rm -f *.o *.d *.exe  deadlock 
-#pthread3: pthread3.o
-#	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS3) $(LIBS)
+	-rm -f *.o *.d *.exe  deadlock deadlock_fix
 
-#pthread3ok: pthread3ok.o
-#	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS1) $(LIBS)
 
 deadlock: deadlock.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS1) $(LIBS)
 
-#deadlock_timeout: deadlock_timeout.o
-#	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS4) $(LIBS)
+deadlock_fix: deadlock_timeout.o
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS2) $(LIBS)
 
 depend:
 
