@@ -9,21 +9,28 @@ HFILES=
 
 CFILES1= deadlock.c
 CFILES2= deadlock_fix.c
+CFILES3= pthread3.c
+CFILES4= pthread3ok.c
+
 
 
 SRCS1= ${HFILES} ${CFILES1}
 SRCS2= ${HFILES} ${CFILES2}
+SRCS3= ${HFILES} ${CFILES3}
+SRCS4= ${HFILES} ${CFILES4}
 
 
 
 OBJS1= ${CFILES1:.c=.o}
 OBJS2= ${CFILES2:.c=.o}
+OBJS1= ${CFILES3:.c=.o}
+OBJS2= ${CFILES4:.c=.o}
 
 
-all:  deadlock deadlock_fix
+all:  deadlock deadlock_fix pthread3 pthread3ok
 
 clean:
-	-rm -f *.o *.d *.exe  deadlock deadlock_fix
+	-rm -f *.o *.d *.exe  deadlock deadlock_fix pthread3 pthread3ok
 
 
 deadlock: deadlock.o
@@ -31,6 +38,12 @@ deadlock: deadlock.o
 
 deadlock_fix: deadlock_fix.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS2) $(LIBS)
+	
+pthread3: pthread3.o
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS3) $(LIBS)
+	
+pthread3ok: pthread3ok.o
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS4) $(LIBS)
 
 
 
