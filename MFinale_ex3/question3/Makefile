@@ -23,8 +23,8 @@ SRCS4= ${HFILES} ${CFILES4}
 
 OBJS1= ${CFILES1:.c=.o}
 OBJS2= ${CFILES2:.c=.o}
-OBJS1= ${CFILES3:.c=.o}
-OBJS2= ${CFILES4:.c=.o}
+OBJS3= ${CFILES3:.c=.o}
+OBJS4= ${CFILES4:.c=.o}
 
 
 all:  deadlock deadlock_fix pthread3 pthread3ok
